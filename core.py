@@ -202,7 +202,7 @@ class Quantity:
         value = first.value + second.value
         error = math.hypot(first.error, second.error)
         return Quantity(value, error, first.units, first.system)
-    elif isinstance(other, numbers.Number):
+    elif isinstance(other, numbers.Real):
       first = self.expand()
       if not first.units:
         return Quantity(first.value + other, first.error, {}, first.system)
@@ -215,7 +215,7 @@ class Quantity:
         value = first.value - second.value
         error = math.hypot(first.error, second.error)
         return Quantity(value, error, first.units, first.system)
-    elif isinstance(other, numbers.Number):
+    elif isinstance(other, numbers.Real):
       first = self.expand()
       if not first.units:
         return Quantity(first.value - other, first.error, {}, first.system)
@@ -227,7 +227,7 @@ class Quantity:
       error = math.hypot(self.error * other.value, other.error * self.value)
       units = UnitArithmetic.multiply(self.units, other.units)
       return Quantity(value, error, units, self.system)
-    elif isinstance(other, numbers.Number):
+    elif isinstance(other, numbers.Real):
       value = self.value * other
       error = abs(self.error * other)
       return Quantity(value, error, self.units, self.system)
@@ -241,7 +241,7 @@ class Quantity:
         other.error * self.value / other.value**2)
       units = UnitArithmetic.divide(self.units, other.units)
       return Quantity(value, error, units, self.system)
-    elif isinstance(other, numbers.Number):
+    elif isinstance(other, numbers.Real):
       value = self.value / other
       error = abs(self.error / other)
       return Quantity(value, error, self.units, self.system)
@@ -270,31 +270,31 @@ class Quantity:
     return NotImplemented
 
   def __radd__(self, other):
-    if isinstance(other, numbers.Number):
+    if isinstance(other, numbers.Real):
       return self + other
     else:
       return NotImplemented
 
   def __rsub__(self, other):
-    if isinstance(other, numbers.Number):
+    if isinstance(other, numbers.Real):
       return -self + other
     else:
       return NotImplemented
 
   def __rmul__(self, other):
-    if isinstance(other, numbers.Number):
+    if isinstance(other, numbers.Real):
       return self * other
     else:
       return NotImplemented
 
   def __rtruediv__(self, other):
-    if isinstance(other, numbers.Number):
+    if isinstance(other, numbers.Real):
       return self**-1 * other
     else:
       return NotImplemented
 
   def __rpow__(self, other):
-    if isinstance(other, numbers.Number):
+    if isinstance(other, numbers.Real):
       second = self.expand()
       if not second.units:
         return Quantity(other, 0, {}, second.system) ** second
@@ -353,14 +353,14 @@ class Quantity:
 
   @staticmethod
   def make_same_system(args):
-    if all(isinstance(arg, numbers.Number) for arg in args):
+    if all(isinstance(arg, numbers.Real) for arg in args):
       return args
-    if not all(isinstance(arg, (Quantity, numbers.Number)) for arg in args):
+    if not all(isinstance(arg, (Quantity, numbers.Real)) for arg in args):
       raise TypeError('arguments are not all quantities or numbers')
     systems = [arg.system for arg in args if isinstance(arg, Quantity)]
     if not all(system is systems[0] for system in systems):
       raise TypeError('arguments do not have the same system')
-    return [Quantity(arg, 0, {}, systems[0]) if isinstance(arg, numbers.Number)
+    return [Quantity(arg, 0, {}, systems[0]) if isinstance(arg, numbers.Real)
       else arg for arg in args]
 
 def wrap_unitless_function(func, *derivs):

@@ -16,7 +16,7 @@ def expand(quantity=None):
       quantity = builtins._
       if isinstance(quantity, Quantity):
         return quantity.expand()
-      elif isinstance(quantity, numbers.Number):
+      elif isinstance(quantity, numbers.Real):
         return quantity
 
 class Importer:
