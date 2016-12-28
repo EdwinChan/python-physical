@@ -1,7 +1,8 @@
 import argparse
-import sys
+import unittest
 
 from .define import defined_systems
+from .test import PhysicalQuantitiesTest
 
 def print_units(system):
   if system.units:
@@ -21,21 +22,27 @@ def print_constants(system):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(
-    description='Show all defined units and constants.')
-  parser.add_argument('system', choices=defined_systems, nargs='?',
-    default='si', help='unit system')
-  parser.add_argument('--test', action='store_true',
-    help='run unit tests')
+    description='Perform algebraic operations on physical quantities.')
+  subparsers = parser.add_subparsers(dest='mode')
+
+  list_subparser = subparsers.add_parser('list',
+    help='list units and constants',
+    description='List all defined units and constants.')
+  list_subparser.add_argument('system',
+    nargs='?', choices=defined_systems, default='si',
+    help='unit system')
+
+  test_subparser = subparsers.add_parser('test',
+    help='run unit tests',
+    description='Run unit tests.')
 
   args = parser.parse_args()
 
-  if not args.test:
+  if args.mode == 'list':
     system = defined_systems[args.system]
     print('Available units:')
     print_units(system)
     print('Available constants:')
     print_constants(system)
-  else:
-    import unittest
-    from .test import PhysicalQuantitiesTest
+  elif args.mode == 'test':
     unittest.TextTestRunner().run(unittest.makeSuite(PhysicalQuantitiesTest))
