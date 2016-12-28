@@ -1,6 +1,9 @@
 import fractions
 import math
+import re
 import unittest
+import urllib.error
+import urllib.request
 
 from .core import Quantity
 from .define import defined_systems
@@ -156,6 +159,43 @@ class PhysicalQuantitiesTest(unittest.TestCase):
     self.assertAlmostEqual(a.value * 1e3, b.value * 1e3)
     self.assertAlmostEqual(a.value * 1e3, c.value * 1e3)
     self.assertAlmostEqual(a.value * 1e3, d.value * 1e3)
+
+  def test_codata(self):
+    url = 'http://physics.nist.gov/cuu/Constants/Table/allascii.txt'
+
+    units = [
+      ('unified atomic mass unit', 'AtomicMassUnit')]
+    constants = [
+      ('Avogadro constant', 'AvogadroConstant'),
+      ('electron g factor', 'ElectronGFactor'),
+      ('proton g factor', 'ProtonGFactor'),
+      ('neutron g factor', 'NeutronGFactor'),
+      ('muon g factor', 'MuonGFactor'),
+      ('Boltzmann constant', 'BoltzmannConstant'),
+      ('Planck constant', 'PlanckConstant'),
+      ('electron mass', 'ElectronMass'),
+      ('proton mass', 'ProtonMass'),
+      ('neutron mass', 'NeutronMass'),
+      ('atomic unit of charge', 'ElementaryCharge'),
+      ('Newtonian constant of gravitation', 'GravitationalConstant')]
+
+    try:
+      response = urllib.request.urlopen(url)
+    except urllib.error.URLError:
+      print('Cannot download data.', file=sys.stderr)
+      return
+
+    data = response.read().decode('ascii').rstrip('\n').split('\n')[10:]
+    data = [re.split(' {2,}', x) for x in data]
+    data = {x[0]: (x[1].replace(' ', ''), x[2].replace(' ', '')) for x in data}
+    for codata_name, local_name in units:
+      quantity = Quantity(1, 0, {local_name: 1}, si).expand()
+      assert math.isclose(quantity.value, float(data[codata_name][0]))
+      assert math.isclose(quantity.error, float(data[codata_name][1]))
+    for codata_name, local_name in constants:
+      quantity = si.get_constant(local_name).expand()
+      assert math.isclose(quantity.value, float(data[codata_name][0]))
+      assert math.isclose(quantity.error, float(data[codata_name][1]))
 
 if __name__ == '__main__':
   unittest.main()
