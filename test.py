@@ -1,4 +1,3 @@
-import fractions
 import math
 import re
 import unittest
@@ -163,39 +162,50 @@ class PhysicalQuantitiesTest(unittest.TestCase):
   def test_codata(self):
     url = 'http://physics.nist.gov/cuu/Constants/Table/allascii.txt'
 
-    units = [
-      ('unified atomic mass unit', 'AtomicMassUnit')]
-    constants = [
-      ('Avogadro constant', 'AvogadroConstant'),
-      ('electron g factor', 'ElectronGFactor'),
-      ('proton g factor', 'ProtonGFactor'),
-      ('neutron g factor', 'NeutronGFactor'),
-      ('muon g factor', 'MuonGFactor'),
-      ('Boltzmann constant', 'BoltzmannConstant'),
-      ('Planck constant', 'PlanckConstant'),
-      ('electron mass', 'ElectronMass'),
-      ('proton mass', 'ProtonMass'),
-      ('neutron mass', 'NeutronMass'),
-      ('atomic unit of charge', 'ElementaryCharge'),
-      ('Newtonian constant of gravitation', 'GravitationalConstant')]
+    units = {
+      'AtomicMassUnit':        'unified atomic mass unit'}
+    constants = {
+      'AvogadroConstant':      'Avogadro constant',
+      'ElectronGFactor':       'electron g factor',
+      'ProtonGFactor':         'proton g factor',
+      'NeutronGFactor':        'neutron g factor',
+      'MuonGFactor':           'muon g factor',
+      'LightSpeed':            'speed of light in vacuum',
+      'ElementaryCharge':      'atomic unit of charge',
+      'PlanckConstant':        'Planck constant',
+      'BoltzmannConstant':     'Boltzmann constant',
+      'GravitationalConstant': 'Newtonian constant of gravitation',
+      'VacuumPermeability':    'vacuum mag. permeability',
+      'ElectronMass':          'electron mass',
+      'ProtonMass':            'proton mass',
+      'NeutronMass':           'neutron mass',
+      'MuonMass':              'muon mass'}
 
     try:
       response = urllib.request.urlopen(url)
     except urllib.error.URLError:
-      print('Cannot download data.', file=sys.stderr)
-      return
+      raise ValueError('Cannot download data.')
 
-    data = response.read().decode('ascii').rstrip('\n').split('\n')[10:]
-    data = [re.split(' {2,}', x) for x in data]
-    data = {x[0]: (x[1].replace(' ', ''), x[2].replace(' ', '')) for x in data}
-    for codata_name, local_name in units:
+    data = iter(response.read().decode('ascii').rstrip('\n').split('\n'))
+    while not next(data).startswith('--'):
+      pass
+    data = (re.split(' {2,}', x) for x in data)
+    def parse_value(x):
+      return float(x.replace(' ', '').replace('...', ''))
+    def parse_error(x):
+      return 0 if x == '(exact)' else float(x.replace(' ', ''))
+    data = {x: (parse_value(y), parse_error(z)) for x, y, z, *_ in data}
+
+    for local_name, codata_name in units.items():
       quantity = Quantity(1, 0, {local_name: 1}, si).expand()
-      assert math.isclose(quantity.value, float(data[codata_name][0]))
-      assert math.isclose(quantity.error, float(data[codata_name][1]))
-    for codata_name, local_name in constants:
+      x, y = data[codata_name]
+      assert math.isclose(quantity.value, x)
+      assert math.isclose(quantity.error, y)
+    for local_name, codata_name in constants.items():
       quantity = si.get_constant(local_name).expand()
-      assert math.isclose(quantity.value, float(data[codata_name][0]))
-      assert math.isclose(quantity.error, float(data[codata_name][1]))
+      x, y = data[codata_name]
+      assert math.isclose(quantity.value, x)
+      assert math.isclose(quantity.error, y)
 
 if __name__ == '__main__':
   unittest.main()
