@@ -143,8 +143,8 @@ class UnitSystem:
       else:
         temp1 = value / 10**value_head
         temp2 = error / 10**value_head
-        return '({:.{dp}f} \xb1 {:.{dp}f})e{}'.format(temp1, temp2, value_head,
-          dp=dp)
+        return '({:.{dp}f} \xb1 {:.{dp}f})e{:+03}'.format(temp1, temp2,
+          value_head, dp=dp)
     else:
       if value_head >= error_head:
         formatted_head = value_head
