@@ -132,6 +132,9 @@ class UnitSystem:
     value_head = math.floor(math.log10(abs(value)))
     error_head = math.floor(math.log10(error))
     error_tail = error_head - error_sigfig + 1
+    # handle the case when rounding changes the number of significant digits
+    if round(abs(value), -error_tail) >= 10**(value_head+1):
+      value_head += 1
     if mode == 's':
       dp = max(value_head - error_tail, 0)
       if value_head == 0:
