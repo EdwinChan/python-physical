@@ -8,7 +8,7 @@ def print_units(system):
   if system.units:
     data = [[data['symbol'], data['expansion']]
       for data in system.units.values()]
-    width = max(len(item[0]) for item in data)
+    width = max(len(symbol) for symbol, _ in data)
     for item in sorted(data):
       print(('  {:{width}}  {}').format(*item, width=width))
 
@@ -16,7 +16,7 @@ def print_constants(system):
   if system.constants:
     data = [[data['symbol'], data['definition']]
       for data in system.constants.values()]
-    width = max(len(item[0]) for item in data)
+    width = max(len(symbol) for symbol, _ in data)
     for item in sorted(data):
       print(('  {:{width}}  {}').format(*item, width=width))
 
