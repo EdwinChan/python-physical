@@ -1,3 +1,9 @@
+# sources:
+#   2014 CODATA recommended values
+#   IUPAC standard atomic weights 2017
+#   IAU 2012, Resolution B2
+#   IAU 2015, Resolution B3
+
 import fractions
 import math
 import weakref
@@ -23,7 +29,7 @@ shared_system.add_unit('Katal', 'kat',
 shared_system.add_unit('Day', 'd',
   Quantity(86400, 0, {'Second': 1}, shared_system))
 shared_system.add_unit('JulianYear', 'a',
-  Quantity(31557600, 0, {'Second': 1}, shared_system))
+  Quantity(365.25, 0, {'Day': 1}, shared_system))
 shared_system.add_unit('Degree', '\xb0',
   Quantity(math.pi / 180, 0, {'Radian': 1}, shared_system))
 shared_system.add_unit('ArcMinute', "'",
@@ -87,6 +93,8 @@ si_system.add_constant('ProtonMass', 'mp',
   Quantity(1.672621898e-27, 2.1e-35, {'Kilogram': 1}, si_system))
 si_system.add_constant('NeutronMass', 'mn',
   Quantity(1.674927471e-27, 2.1e-35, {'Kilogram': 1}, si_system))
+si_system.add_constant('MuonMass', 'm\u03bc',
+  Quantity(1.883531594e-28, 4.8e-36, {'Kilogram': 1}, si_system))
 
 si_system.add_constant('VacuumPermeability', '\u03bc0',
   Quantity(4e-7 * math.pi, 0, {'Newton': 1, 'Ampere': -2}, si_system))
@@ -123,6 +131,13 @@ si_system.add_constant('StefanBoltzmannConstant', '\u03c3SB',
 si_system.add_constant('RadiationConstant', 'aSB',
   4 * si_system.get_constant({'StefanBoltzmannConstant': 1, 'LightSpeed': -1}))
 
+si_system.add_unit('AtomicMassUnit', 'amu',
+  Quantity(1.660539040e-27, 2e-35, {'Kilogram': 1}, si_system))
+si_system.add_constant('HydrogenMass', 'mH',
+  Quantity(1.007975, 1.35e-4, {'AtomicMassUnit': 1}, si_system))
+si_system.add_constant('HeliumMass', 'mHe',
+  Quantity(4.002602, 2e-6, {'AtomicMassUnit': 1}, si_system))
+
 si_system.add_constant('GravitationalConstant', 'G',
   Quantity(6.67408e-11, 3.1e-15, {
     'Newton': 1, 'Kilogram': -2, 'Meter': 2}, si_system))
@@ -130,19 +145,22 @@ si_system.add_constant('StandardGravity', 'g0',
   Quantity(fractions.Fraction(980665, 10**5), 0, {
     'Newton': 1, 'Kilogram': -1}, si_system))
 si_system.add_constant('SunMass', 'mSun',
-  Quantity(1.9891e30, 0, {'Kilogram': 1}, si_system))
+  Quantity(1.3271244e20, 0, {'Meter': 3, 'Second': -2}, si_system) /
+  si_system.get_constant('GravitationalConstant'))
 si_system.add_constant('SunRadius', 'rSun',
-  Quantity(6.96342e8, 0, {'Meter': 1}, si_system))
+  Quantity(6.957e8, 0, {'Meter': 1}, si_system))
 si_system.add_constant('SunLuminosity', 'lSun',
-  Quantity(3.846e26, 0, {'Watt': 1}, si_system))
+  Quantity(3.828e26, 0, {'Watt': 1}, si_system))
 si_system.add_constant('EarthMass', 'mEarth',
-  Quantity(5.9736e24, 0, {'Kilogram': 1}, si_system))
-si_system.add_constant('EarthRadius', 'rEarth',
-  Quantity(6.371e6, 0, {'Meter': 1}, si_system))
+  Quantity(3.986004e14, 0, {'Meter': 3, 'Second': -2}, si_system) /
+  si_system.get_constant('GravitationalConstant'))
+si_system.add_constant('EarthEquatorialRadius', 'rEarth',
+  Quantity(6.3781e6, 0, {'Meter': 1}, si_system))
 si_system.add_constant('JupiterMass', 'mJupiter',
-  Quantity(1.8986e27, 0, {'Kilogram': 1}, si_system))
-si_system.add_constant('JupiterRadius', 'rJupiter',
-  Quantity(6.9911e4, 6, {'Meter': 1}, si_system))
+  Quantity(1.2668653e17, 0, {'Meter': 3, 'Second': -2}, si_system) /
+  si_system.get_constant('GravitationalConstant'))
+si_system.add_constant('JupiterEquatorialRadius', 'rJupiter',
+  Quantity(7.1492e7, 0, {'Meter': 1}, si_system))
 
 si_system.add_unit('Gray', 'Gy',
   Quantity(1, 0, {'Joule': 1, 'Kilogram': -1}, si_system))
@@ -157,8 +175,6 @@ si_system.add_unit('TechnicalAtmosphere', 'at',
 si_system.add_unit('Torr', 'Torr',
   Quantity(fractions.Fraction(1, 760), 0, {
     'StandardAtmosphere': 1}, si_system))
-si_system.add_unit('AtomicMassUnit', 'amu',
-  Quantity(1.660539040e-27, 2.0e-35, {'Kilogram': 1}, si_system))
 si_system.add_unit('RydbergEnergy', 'Ry',
   1/8 * si_system.get_constant({
     'ElectronMass': 1, 'ElementaryCharge': 4,
@@ -179,11 +195,6 @@ si_system.add_unit('LightYear', 'ly', (
 si_system.add_unit('\xc5ngstr\xf6m', '\u212b',
   Quantity(fractions.Fraction(1, 10**10), 0, {
     'Meter': 1}, si_system))
-
-si_system.add_constant('HydrogenMass', 'mH',
-  Quantity(1.00794, 7e-5, {'AtomicMassUnit': 1}, si_system))
-si_system.add_constant('HeliumMass', 'mHe',
-  Quantity(4.002602, 2e-6, {'AtomicMassUnit': 1}, si_system))
 
 cgs_system = shared_system.copy()
 
