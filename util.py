@@ -32,9 +32,9 @@ class Importer:
     elif fullname in self.fullname_to_system:
       module = types.ModuleType(fullname)
       system = self.fullname_to_system[fullname]
-      self.insert_variables(system, module.__dict__)
-      if not hasattr(__main__, '__file__'):
-        self.insert_interactive_features(module.__dict__)
+      self.inject_variables(system, module.__dict__)
+      if not hasattr(__main__, '__file__') or sys.flags.interactive:
+        self.inject_interactive_features(module.__dict__)
       sys.modules[fullname] = module
       return module
     else:
@@ -53,7 +53,7 @@ class Importer:
       importlib.import_module(fullname)
 
   @staticmethod
-  def insert_variables(system, scope):
+  def inject_variables(system, scope):
     scope['system'] = system
     symbol_to_english = {
       '\u03b1': 'alpha',    '\u03b2': 'beta',     '\u03b3': 'gamma',
@@ -79,13 +79,13 @@ class Importer:
       scope[name] = data['definition']
 
   @classmethod
-  def insert_interactive_features(cls, scope):
+  def inject_interactive_features(cls, scope):
     scope['Quantity'] = Quantity
     scope['Quantity'].__repr__ = scope['Quantity'].__str__
     scope['expand'] = expand
-    cls.insert_extended_functions(scope)
+    cls.inject_extended_functions(scope)
 
   @staticmethod
-  def insert_extended_functions(scope):
+  def inject_extended_functions(scope):
     for function in extended_functions:
       scope[function.__name__] = function

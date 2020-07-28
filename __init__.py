@@ -2,5 +2,5 @@ from .core import Quantity
 from .util import Importer
 
 Importer.enable()
-Importer.insert_extended_functions(globals())
+Importer.inject_extended_functions(globals())
 del Importer
