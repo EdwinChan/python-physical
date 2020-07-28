@@ -1,8 +1,8 @@
 # sources:
-#   2014 CODATA recommended values
-#   IUPAC standard atomic weights 2017
-#   IAU 2012, Resolution B2
-#   IAU 2015, Resolution B3
+#   2018 CODATA recommended values
+#   IUPAC, CIAAW, "Atomic weights of the elements 2013"
+#   IAU 2012 resolution B2
+#   IAU 2015 resolution B3
 
 import fractions
 import math
@@ -38,11 +38,11 @@ shared_system.add_unit('ArcSecond', '"',
   Quantity(fractions.Fraction(1, 60), 0, {'ArcMinute': 1}, shared_system))
 
 shared_system.add_constant('AvogadroConstant', 'nA',
-  Quantity(6.022140857e23, 7.4e15, {'Mole': -1}, shared_system))
+  Quantity(6.02214076e23, 0, {'Mole': -1}, shared_system))
 shared_system.add_constant('ElectronGFactor', 'ge',
-  Quantity(-2.00231930436182, 5.2e-13, {}, shared_system))
+  Quantity(-2.00231930436256, 3.5e-13, {}, shared_system))
 shared_system.add_constant('ProtonGFactor', 'gp',
-  Quantity(5.585694702, 1.7e-8, {}, shared_system))
+  Quantity(5.5856946893, 1.6e-9, {}, shared_system))
 shared_system.add_constant('NeutronGFactor', 'gn',
   Quantity(-3.82608545, 9e-7, {}, shared_system))
 shared_system.add_constant('MuonGFactor', 'g\u03bc',
@@ -83,31 +83,31 @@ si_specific_units = si_system.units.keys() - shared_system.units.keys()
 
 si_system.add_constant('LightSpeed', 'c',
   Quantity(299792458, 0, {'Meter': 1, 'Second': -1}, si_system))
-si_system.add_constant('BoltzmannConstant', 'kB',
-  Quantity(1.38064852e-23, 7.9e-30, {'Joule': 1, 'Kelvin': -1}, si_system))
+si_system.add_constant('ElementaryCharge', 'e',
+  Quantity(1.602176634e-19, 0, {'Coulomb': 1}, si_system))
 si_system.add_constant('PlanckConstant', 'h',
-  Quantity(6.626070040e-34, 8.1e-42, {'Joule': 1, 'Second': 1}, si_system))
-si_system.add_constant('ElectronMass', 'me',
-  Quantity(9.10938356e-31, 1.1e-38, {'Kilogram': 1}, si_system))
-si_system.add_constant('ProtonMass', 'mp',
-  Quantity(1.672621898e-27, 2.1e-35, {'Kilogram': 1}, si_system))
-si_system.add_constant('NeutronMass', 'mn',
-  Quantity(1.674927471e-27, 2.1e-35, {'Kilogram': 1}, si_system))
-si_system.add_constant('MuonMass', 'm\u03bc',
-  Quantity(1.883531594e-28, 4.8e-36, {'Kilogram': 1}, si_system))
+  Quantity(6.62607015e-34, 0, {'Joule': 1, 'Second': 1}, si_system))
+si_system.add_constant('BoltzmannConstant', 'kB',
+  Quantity(1.380649e-23, 0, {'Joule': 1, 'Kelvin': -1}, si_system))
 
+si_system.add_constant('GravitationalConstant', 'G',
+  Quantity(6.6743e-11, 1.5e-15, {
+    'Newton': 1, 'Kilogram': -2, 'Meter': 2}, si_system))
 si_system.add_constant('VacuumPermeability', '\u03bc0',
-  Quantity(4e-7 * math.pi, 0, {'Newton': 1, 'Ampere': -2}, si_system))
+  Quantity(1.25663706212e-6, 1.9e-16, {'Newton': 1, 'Ampere': -2}, si_system))
+si_system.add_constant('ElectronMass', 'me',
+  Quantity(9.1093837015e-31, 2.8e-40, {'Kilogram': 1}, si_system))
+si_system.add_constant('ProtonMass', 'mp',
+  Quantity(1.67262192369e-27, 5.1e-37, {'Kilogram': 1}, si_system))
+si_system.add_constant('NeutronMass', 'mn',
+  Quantity(1.67492749804e-27, 9.5e-37, {'Kilogram': 1}, si_system))
+si_system.add_constant('MuonMass', 'm\u03bc',
+  Quantity(1.883531627e-28, 4.2e-36, {'Kilogram': 1}, si_system))
+
 si_system.add_constant('VacuumPermittivity', '\u03b50',
   si_system.get_constant({'LightSpeed': -2, 'VacuumPermeability': -1}))
-si_system.add_constant('ElementaryCharge', 'e',
-  Quantity(1.6021766208e-19, 9.8e-28, {'Coulomb': 1}, si_system))
-si_system.add_constant('BohrMagneton', '\u03bcB',
-  1 / (4*math.pi) * si_system.get_constant({
-    'ElementaryCharge': 1, 'PlanckConstant': 1, 'ElectronMass': -1}))
-
 si_system.add_constant('ReducedPlanckConstant', '\u0127',
-  si_system.get_constant('PlanckConstant') / (2 * math.pi))
+  si_system.get_constant('PlanckConstant') / (2*math.pi))
 si_system.add_constant('FineStructureConstant', '\u03b1',
   1/2 * si_system.get_constant({
     'ElementaryCharge': 2, 'VacuumPermittivity': -1,
@@ -116,34 +116,31 @@ si_system.add_constant('BohrRadius', 'a0',
   si_system.get_constant({
     'ReducedPlanckConstant': 1, 'ElectronMass': -1,
     'LightSpeed': -1, 'FineStructureConstant': -1}))
-si_system.add_constant('HydrogenIonizationThresholdCrossSection', '\u03c3H',
-  512/3 * math.pi**2 / math.exp(4) * si_system.get_constant({
-    'FineStructureConstant': 1, 'BohrRadius': 2}))
+si_system.add_constant('BohrMagneton', '\u03bcB',
+  1/(4*math.pi) * si_system.get_constant({
+    'ElementaryCharge': 1, 'PlanckConstant': 1, 'ElectronMass': -1}))
 si_system.add_constant('ThomsonCrossSection', '\u03c3T',
   8/3 * math.pi * si_system.get_constant({
     'FineStructureConstant': 2, 'ReducedPlanckConstant': 2,
     'ElectronMass': -2, 'LightSpeed': -2}))
-si_system.add_constant('MolarGasConstant', 'R',
-  si_system.get_constant({'AvogadroConstant': 1, 'BoltzmannConstant': 1}))
+si_system.add_constant('HydrogenIonizationThresholdCrossSection', '\u03c3H',
+  512/3 * math.pi**2 / math.exp(4) * si_system.get_constant({
+    'FineStructureConstant': 1, 'BohrRadius': 2}))
 si_system.add_constant('StefanBoltzmannConstant', '\u03c3SB',
   2/15 * math.pi**5 * si_system.get_constant({
     'BoltzmannConstant': 4, 'PlanckConstant': -3, 'LightSpeed': -2}))
 si_system.add_constant('RadiationConstant', 'aSB',
   4 * si_system.get_constant({'StefanBoltzmannConstant': 1, 'LightSpeed': -1}))
+si_system.add_constant('MolarGasConstant', 'R',
+  si_system.get_constant({'AvogadroConstant': 1, 'BoltzmannConstant': 1}))
 
 si_system.add_unit('AtomicMassUnit', 'amu',
-  Quantity(1.660539040e-27, 2e-35, {'Kilogram': 1}, si_system))
+  Quantity(1.6605390666e-27, 5e-37, {'Kilogram': 1}, si_system))
 si_system.add_constant('HydrogenMass', 'mH',
   Quantity(1.007975, 1.35e-4, {'AtomicMassUnit': 1}, si_system))
 si_system.add_constant('HeliumMass', 'mHe',
   Quantity(4.002602, 2e-6, {'AtomicMassUnit': 1}, si_system))
 
-si_system.add_constant('GravitationalConstant', 'G',
-  Quantity(6.67408e-11, 3.1e-15, {
-    'Newton': 1, 'Kilogram': -2, 'Meter': 2}, si_system))
-si_system.add_constant('StandardGravity', 'g0',
-  Quantity(fractions.Fraction(980665, 10**5), 0, {
-    'Newton': 1, 'Kilogram': -1}, si_system))
 si_system.add_constant('SunMass', 'mSun',
   Quantity(1.3271244e20, 0, {'Meter': 3, 'Second': -2}, si_system) /
   si_system.get_constant('GravitationalConstant'))
@@ -162,39 +159,46 @@ si_system.add_constant('JupiterMass', 'mJupiter',
 si_system.add_constant('JupiterEquatorialRadius', 'rJupiter',
   Quantity(7.1492e7, 0, {'Meter': 1}, si_system))
 
-si_system.add_unit('Gray', 'Gy',
-  Quantity(1, 0, {'Joule': 1, 'Kilogram': -1}, si_system))
-si_system.add_unit('Sievert', 'Sv',
-  Quantity(1, 0, {'Joule': 1, 'Kilogram': -1}, si_system))
-si_system.add_unit('Bar', 'bar',
-  Quantity(100000, 0, {'Pascal': 1}, si_system))
+si_system.add_unit('\xc5ngstr\xf6m', '\u212b',
+  Quantity(fractions.Fraction(1, 10**10), 0, {
+    'Meter': 1}, si_system))
+si_system.add_constant('StandardGravity', 'g0',
+  Quantity(fractions.Fraction(980665, 10**5), 0, {
+    'Newton': 1, 'Kilogram': -1}, si_system))
+
 si_system.add_unit('StandardAtmosphere', 'atm',
   Quantity(101325, 0, {'Pascal': 1}, si_system))
 si_system.add_unit('TechnicalAtmosphere', 'at',
   Quantity(fractions.Fraction(980665, 10), 0, {'Pascal': 1}, si_system))
+si_system.add_unit('Bar', 'bar',
+  Quantity(100000, 0, {'Pascal': 1}, si_system))
 si_system.add_unit('Torr', 'Torr',
   Quantity(fractions.Fraction(1, 760), 0, {
     'StandardAtmosphere': 1}, si_system))
+
+si_system.add_unit('ElectronVolt', 'eV', (
+  si_system.get_constant('ElementaryCharge') *
+  Quantity(1, 0, {'Volt': 1}, si_system)))
 si_system.add_unit('RydbergEnergy', 'Ry',
   1/8 * si_system.get_constant({
     'ElectronMass': 1, 'ElementaryCharge': 4,
     'VacuumPermittivity': -2, 'PlanckConstant': -2}))
-si_system.add_unit('ElectronVolt', 'eV', (
-  si_system.get_constant('ElementaryCharge') *
-  Quantity(1, 0, {'Volt': 1}, si_system)))
+
+si_system.add_unit('Gray', 'Gy',
+  Quantity(1, 0, {'Joule': 1, 'Kilogram': -1}, si_system))
+si_system.add_unit('Sievert', 'Sv',
+  Quantity(1, 0, {'Joule': 1, 'Kilogram': -1}, si_system))
+
 si_system.add_unit('AstronomicalUnit', 'AU',
   Quantity(149597870700, 0, {'Meter': 1}, si_system))
-si_system.add_unit('Jansky', 'Jy',
-  Quantity(fractions.Fraction(1, 10**26), 0, {
-    'Watt': 1, 'Hertz': -1, 'Meter': -2}, si_system))
 si_system.add_unit('Parsec', 'pc',
   Quantity(180 * 3600 / math.pi, 0, {'AstronomicalUnit': 1}, si_system))
 si_system.add_unit('LightYear', 'ly', (
   si_system.get_constant('LightSpeed') *
   Quantity(1, 0, {'JulianYear': 1}, si_system)))
-si_system.add_unit('\xc5ngstr\xf6m', '\u212b',
-  Quantity(fractions.Fraction(1, 10**10), 0, {
-    'Meter': 1}, si_system))
+si_system.add_unit('Jansky', 'Jy',
+  Quantity(fractions.Fraction(1, 10**26), 0, {
+    'Watt': 1, 'Hertz': -1, 'Meter': -2}, si_system))
 
 cgs_system = shared_system.copy()
 
