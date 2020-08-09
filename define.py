@@ -107,15 +107,22 @@ si_system.add_constant('MuonMass', 'm\u03bc',
 si_system.add_constant('VacuumPermittivity', '\u03b50',
   si_system.get_constant({'LightSpeed': -2, 'VacuumPermeability': -1}))
 si_system.add_constant('ReducedPlanckConstant', '\u0127',
-  si_system.get_constant('PlanckConstant') / (2*math.pi))
+  1/(2*math.pi) * si_system.get_constant('PlanckConstant'))
 si_system.add_constant('FineStructureConstant', '\u03b1',
   1/2 * si_system.get_constant({
-    'ElementaryCharge': 2, 'VacuumPermittivity': -1,
+    'VacuumPermittivity': -1, 'ElementaryCharge': 2,
     'PlanckConstant': -1, 'LightSpeed': -1}))
+si_system.add_constant('ElectronClassicalRadius', 're',
+  1/(4*math.pi) * si_system.get_constant({
+    'VacuumPermittivity': -1, 'ElementaryCharge': 2,
+    'ElectronMass': -1, 'LightSpeed': -2}))
+si_system.add_constant('ElectronComptonWavelength', '\u03bbe',
+  si_system.get_constant({
+    'PlanckConstant': 1, 'ElectronMass': -1, 'LightSpeed': -1}))
 si_system.add_constant('BohrRadius', 'a0',
   si_system.get_constant({
-    'ReducedPlanckConstant': 1, 'ElectronMass': -1,
-    'LightSpeed': -1, 'FineStructureConstant': -1}))
+    'FineStructureConstant': -1, 'ReducedPlanckConstant': 1,
+    'ElectronMass': -1, 'LightSpeed': -1}))
 si_system.add_constant('BohrMagneton', '\u03bcB',
   1/(4*math.pi) * si_system.get_constant({
     'ElementaryCharge': 1, 'PlanckConstant': 1, 'ElectronMass': -1}))
@@ -181,8 +188,8 @@ si_system.add_unit('ElectronVolt', 'eV', (
   Quantity(1, 0, {'Volt': 1}, si_system)))
 si_system.add_unit('RydbergEnergy', 'Ry',
   1/8 * si_system.get_constant({
-    'ElectronMass': 1, 'ElementaryCharge': 4,
-    'VacuumPermittivity': -2, 'PlanckConstant': -2}))
+    'VacuumPermittivity': -2, 'PlanckConstant': -2,
+    'ElementaryCharge': 4, 'ElectronMass': 1}))
 
 si_system.add_unit('Gray', 'Gy',
   Quantity(1, 0, {'Joule': 1, 'Kilogram': -1}, si_system))
