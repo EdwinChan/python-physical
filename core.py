@@ -209,9 +209,12 @@ class Quantity:
         error = math.hypot(first.error, second.error)
         return Quantity(value, error, first.units, first.system)
     elif isinstance(other, numbers.Real):
-      first = self.expand()
-      if not first.units:
-        return Quantity(first.value + other, first.error, {}, first.system)
+      if other == 0:
+        return +self
+      else:
+        first = self.expand()
+        if not first.units:
+          return Quantity(first.value + other, first.error, {}, first.system)
     return NotImplemented
 
   def __sub__(self, other):
@@ -222,9 +225,12 @@ class Quantity:
         error = math.hypot(first.error, second.error)
         return Quantity(value, error, first.units, first.system)
     elif isinstance(other, numbers.Real):
-      first = self.expand()
-      if not first.units:
-        return Quantity(first.value - other, first.error, {}, first.system)
+      if other == 0:
+        return +self
+      else:
+        first = self.expand()
+        if not first.units:
+          return Quantity(first.value - other, first.error, {}, first.system)
     return NotImplemented
 
   def __mul__(self, other):
