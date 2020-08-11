@@ -5,8 +5,9 @@ import numbers
 import sys
 import types
 
-from .core import Quantity, extended_functions
+from .core import Quantity
 from .define import defined_systems
+from .func import extended_functions
 
 def expand(quantity=None):
   if quantity is not None:
