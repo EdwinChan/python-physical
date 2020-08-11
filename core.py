@@ -98,9 +98,7 @@ class UnitSystem:
 
   def format_quantity(self, quantity, format_spec):
     if quantity.units:
-      units_string = ' '.join(self.format_unit(unit, power)
-        for unit, power in sorted(quantity.units.items(),
-        key=lambda arg: (math.copysign(1, -arg[1]), arg[0])))
+      units_string = self.format_units(quantity.units)
       if quantity.error == 0:
         return '{} {}'.format(quantity.value, units_string)
       else:
@@ -158,6 +156,11 @@ class UnitSystem:
         return '{:.{dp}f}({})'.format(temp1, temp2, dp=dp)
       else:
         return '{:.{dp}f}({})e{}'.format(temp1, temp2, formatted_head, dp=dp)
+
+  def format_units(self, units):
+    return ' '.join(self.format_unit(unit, power)
+      for unit, power in sorted(units.items(),
+      key=lambda arg: (math.copysign(1, -arg[1]), arg[0])))
 
   def format_unit(self, unit, power):
     symbol = self.units.get(unit, {'symbol': unit})['symbol']
