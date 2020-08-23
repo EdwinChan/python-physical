@@ -125,6 +125,12 @@ class UnitSystem:
         if temp > 0:
           error_sigfig = temp
       mode = match.group(2)
+    if not math.isfinite(value) or not math.isfinite(error):
+      if mode == 's':
+        result = '{} \xb1 {}'.format(value, error)
+      else:
+        result = '{}({})'.format(value, error)
+      return '({})'.format(result) if parens else result
     # 'head' and 'tail' refer to the places (in positional notation) of the
     # highest and lowest displayed digits of a number
     value_head = math.floor(math.log10(abs(value)))
