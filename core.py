@@ -281,7 +281,7 @@ class Quantity:
           math.log(first.value) * second.error)
         return Quantity(value, error, {}, first.system)
     elif isinstance(other, numbers.Real):
-      value = 1 if self.value == 1 else self.value ** other
+      value = self.value ** other
       error = abs(other * value / self.value * self.error)
       units = UnitArithmetic.power(self.units, other)
       return Quantity(value, error, units, self.system)
