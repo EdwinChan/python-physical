@@ -277,15 +277,21 @@ class Quantity:
       first, second = self.expand(), other.expand()
       if not first.units and not second.units:
         value = first.value ** second.value
-        error = value * math.hypot(
-          second.value / first.value * first.error,
-          math.log(first.value) * second.error)
+        if first.value != 0:
+          error = value * math.hypot(
+            second.value / first.value * first.error,
+            math.log(first.value) * second.error)
+        else:
+          error = first.error ** second.value
         return Quantity(value, error, {}, first.system)
       elif first.units and second.error == 0 and not second.units:
         return first ** second.value
     elif isinstance(other, numbers.Real):
       value = self.value ** other
-      error = abs(other * value / self.value * self.error)
+      if self.value != 0:
+        error = abs(other * value / self.value * self.error)
+      else:
+        error = self.error ** other
       units = UnitArithmetic.power(self.units, other)
       return Quantity(value, error, units, self.system)
     return NotImplemented
