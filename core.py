@@ -116,15 +116,18 @@ class UnitSystem:
   def format_value_error(value, error, format_spec, parens=False):
     # options: number of significant digits displayed for error
     #          separate value and error ('s') or parenthesize error ('p')
+    match = re.fullmatch(r'(\d+)?([sp])?', format_spec)
+    if not match:
+      raise ValueError('invalid format specifier')
     error_sigfig, mode = 2, 's'
-    match = re.match(r'^(\d*)([sp])$', format_spec)
-    if match:
-      temp = match.group(1)
-      if temp:
-        temp = int(temp)
-        if temp > 0:
-          error_sigfig = temp
-      mode = match.group(2)
+    temp = match.group(1)
+    if temp is not None:
+      temp = int(temp)
+      if temp > 0:
+        error_sigfig = temp
+    temp = match.group(2)
+    if temp is not None:
+      mode = temp
     if not math.isfinite(value) or not math.isfinite(error):
       if mode == 's':
         result = '{} \xb1 {}'.format(value, error)
