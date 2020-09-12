@@ -275,17 +275,14 @@ class Quantity:
   def __pow__(self, other):
     if isinstance(other, Quantity) and self.system is other.system:
       first, second = self.expand(), other.expand()
-      if first.units and second.error == 0 and not second.units:
-        value = first.value ** second.value
-        error = value * second.value / first.value * first.error
-        units = UnitArithmetic.power(first.units, second.value)
-        return Quantity(value, error, units, first.system)
-      elif not first.units and not second.units:
+      if not first.units and not second.units:
         value = first.value ** second.value
         error = value * math.hypot(
           second.value / first.value * first.error,
           math.log(first.value) * second.error)
         return Quantity(value, error, {}, first.system)
+      elif first.units and second.error == 0 and not second.units:
+        return first ** second.value
     elif isinstance(other, numbers.Real):
       value = self.value ** other
       error = abs(other * value / self.value * self.error)
