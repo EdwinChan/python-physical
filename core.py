@@ -133,8 +133,11 @@ class UnitSystem:
       return '({})'.format(result) if parens else result
     # 'head' and 'tail' refer to the places (in positional notation) of the
     # highest and lowest displayed digits of a number
-    value_head = math.floor(math.log10(abs(value)))
     error_head = math.floor(math.log10(error))
+    if value != 0:
+      value_head = math.floor(math.log10(abs(value)))
+    else:
+      value_head = error_head
     error_tail = error_head - error_sigfig + 1
     # handle the case when rounding changes the number of significant digits
     if round(abs(value), -error_tail) >= 10**(value_head+1):
