@@ -57,13 +57,24 @@ class UnitSystem:
     self.constants = {}
 
   def add_unit(self, unit, symbol, expansion=None):
-    if expansion is not None and expansion.system() is not self:
+    valid = (
+      expansion is None or
+      isinstance(expansion, numbers.Real) or
+      (isinstance(expansion, Quantity) and expansion.system() is self))
+    if not valid:
       raise TypeError('unit expansion is not in terms of system units')
+    if isinstance(expansion, Quantity):
+      expansion = expansion.expand()
     self.units[unit] = {'symbol': symbol, 'expansion': expansion}
 
   def add_constant(self, constant, symbol, definition):
-    if definition.system() is not self:
+    valid = (
+      isinstance(definition, numbers.Real) or
+      (isinstance(definition, Quantity) and definition.system() is self))
+    if not valid:
       raise TypeError('constant definition is not in terms of system units')
+    if isinstance(definition, Quantity):
+      definition = definition.expand()
     self.constants[constant] = {'symbol': symbol, 'definition': definition}
 
   def get_constant(self, arg):
