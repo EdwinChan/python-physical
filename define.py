@@ -37,7 +37,7 @@ shared_system.add_unit('ArcMinute', "'",
 shared_system.add_unit('ArcSecond', '"',
   Quantity(fractions.Fraction(1, 60), 0, {'ArcMinute': 1}, shared_system))
 
-shared_system.add_constant('AvogadroConstant', 'nA',
+shared_system.add_constant('AvogadroConstant', 'NA',
   Quantity(6.02214076e23, 0, {'Mole': -1}, shared_system))
 shared_system.add_constant('ElectronGFactor', 'ge',
   Quantity(-2.00231930436256, 3.5e-13, {}, shared_system))
@@ -148,19 +148,19 @@ si_system.add_constant('HydrogenMass', 'mH',
 si_system.add_constant('HeliumMass', 'mHe',
   Quantity(4.002602, 2e-6, {'AtomicMassUnit': 1}, si_system))
 
-si_system.add_constant('SunMass', 'mSun',
+si_system.add_constant('SunMass', 'MSun',
   Quantity(1.3271244e20, 0, {'Meter': 3, 'Second': -2}, si_system) /
   si_system.get_constant('GravitationalConstant'))
 si_system.add_constant('SunRadius', 'rSun',
   Quantity(6.957e8, 0, {'Meter': 1}, si_system))
-si_system.add_constant('SunLuminosity', 'lSun',
+si_system.add_constant('SunLuminosity', 'LSun',
   Quantity(3.828e26, 0, {'Watt': 1}, si_system))
-si_system.add_constant('EarthMass', 'mEarth',
+si_system.add_constant('EarthMass', 'MEarth',
   Quantity(3.986004e14, 0, {'Meter': 3, 'Second': -2}, si_system) /
   si_system.get_constant('GravitationalConstant'))
 si_system.add_constant('EarthEquatorialRadius', 'rEarth',
   Quantity(6.3781e6, 0, {'Meter': 1}, si_system))
-si_system.add_constant('JupiterMass', 'mJupiter',
+si_system.add_constant('JupiterMass', 'MJupiter',
   Quantity(1.2668653e17, 0, {'Meter': 3, 'Second': -2}, si_system) /
   si_system.get_constant('GravitationalConstant'))
 si_system.add_constant('JupiterEquatorialRadius', 'rJupiter',

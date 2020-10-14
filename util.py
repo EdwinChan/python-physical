@@ -65,7 +65,7 @@ class Importer:
       '\u03c0': 'pi',       '\u03c1': 'rho',      '\u03c3': 'sigma',
       '\u03c4': 'tau',      '\u03c5': 'upsilon',  '\u03c6': 'phi',
       '\u03c7': 'chi',      '\u03c8': 'psi',      '\u03c9': 'omega',
-      '\xb0':   'deg',      "'":      'min',      '"':      'sec',
+      '\xb0':   'deg',      "'":      'arcmin',   '"':      'arcsec',
       '\u0127': 'hbar',     '\u2126': 'Ohm',      '\u212b': 'angstrom'
     }
     for unit, data in system.units.items():
