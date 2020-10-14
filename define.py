@@ -171,7 +171,7 @@ si_system.add_unit('\xc5ngstr\xf6m', '\u212b',
     'Meter': 1}, si_system))
 si_system.add_constant('StandardGravity', 'g0',
   Quantity(fractions.Fraction(980665, 10**5), 0, {
-    'Newton': 1, 'Kilogram': -1}, si_system))
+    'Meter': 1, 'Second': -2}, si_system))
 
 si_system.add_unit('StandardAtmosphere', 'atm',
   Quantity(101325, 0, {'Pascal': 1}, si_system))
