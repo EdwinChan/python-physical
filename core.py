@@ -385,7 +385,7 @@ class Quantity:
 
   def __repr__(self):
     kwargs = ', '.join(
-      '{}={}'.format(key, repr(self.__dict__[key]))
+      '{}={!r}'.format(key, self.__dict__[key])
       for key in ['value', 'error', 'units', 'system'])
     return '{}({})'.format(self.__class__.__name__, kwargs)
 
@@ -395,16 +395,14 @@ class Quantity:
   def __format__(self, format_spec):
     return self.system().format_quantity(self, format_spec)
 
-  @staticmethod
-  def make_same_system(args):
-    if all(isinstance(arg, numbers.Real) for arg in args):
-      return args
-    if not all(isinstance(arg, (Quantity, numbers.Real)) for arg in args):
-      raise TypeError('arguments are not all quantities or numbers')
-    systems = [arg.system for arg in args if isinstance(arg, Quantity)]
-    if not all(system is systems[0] for system in systems):
-      raise TypeError('arguments do not have the same system')
-    return [
-      Quantity(arg, 0, {}, systems[0]) if isinstance(arg, numbers.Real)
-        else arg
-      for arg in args]
+def coerce_unitless_into_same_system(args):
+  if all(isinstance(arg, numbers.Real) for arg in args):
+    return args
+  if not all(isinstance(arg, (Quantity, numbers.Real)) for arg in args):
+    raise TypeError('arguments are not all quantities or numbers')
+  systems = [arg.system for arg in args if isinstance(arg, Quantity)]
+  if not all(system is systems[0] for system in systems):
+    raise TypeError('arguments do not have the same system')
+  return [
+    Quantity(arg, 0, {}, systems[0]) if isinstance(arg, numbers.Real) else arg
+    for arg in args]

@@ -2,7 +2,7 @@ import fractions
 import functools
 import math
 
-from .core import Quantity
+from .core import Quantity, coerce_unitless_into_same_system
 
 def sqrt(x):
   return x ** fractions.Fraction(1, 2)
@@ -11,7 +11,7 @@ def wrap_unitless_function(func, *derivs):
   @functools.wraps(func)
   def wrapper(*args):
     try:
-      args = Quantity.make_same_system(args)
+      args = coerce_unitless_into_same_system(args)
     except TypeError:
       pass
     else:

@@ -1,9 +1,9 @@
-import __main__
 import builtins
 import numbers
 import sys
 import types
 
+from . import __main__
 from .core import Quantity
 from .define import defined_systems
 from .func import extended_functions
