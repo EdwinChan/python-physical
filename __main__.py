@@ -6,7 +6,8 @@ from .test import PhysicalQuantitiesTest
 
 def print_units(system):
   if system.units:
-    data = [[data['symbol'], data['expansion']]
+    data = [
+      [data['symbol'], data['expansion']]
       for data in system.units.values()]
     width = max(len(symbol) for symbol, _ in data)
     for item in sorted(data):
@@ -14,7 +15,8 @@ def print_units(system):
 
 def print_constants(system):
   if system.constants:
-    data = [[data['symbol'], data['definition']]
+    data = [
+      [data['symbol'], data['definition']]
       for data in system.constants.values()]
     width = max(len(symbol) for symbol, _ in data)
     for item in sorted(data):
@@ -25,14 +27,17 @@ if __name__ == '__main__':
     description='Perform algebraic operations on physical quantities.')
   subparsers = parser.add_subparsers(dest='mode', required=True)
 
-  list_subparser = subparsers.add_parser('list',
+  list_subparser = subparsers.add_parser(
+    'list',
     help='list units and constants',
     description='List all defined units and constants.')
-  list_subparser.add_argument('system',
-    nargs='?', choices=defined_systems, default=next(iter(defined_systems)),
+  list_subparser.add_argument(
+    'system', nargs='?', choices=defined_systems,
+    default=next(iter(defined_systems)),
     help='unit system')
 
-  test_subparser = subparsers.add_parser('test',
+  test_subparser = subparsers.add_parser(
+    'test',
     help='run unit tests',
     description='Run unit tests.')
 

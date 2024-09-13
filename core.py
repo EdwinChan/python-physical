@@ -80,7 +80,8 @@ class UnitSystem:
   def get_constant(self, arg):
     if isinstance(arg, dict):
       # argument is a dictionary of constants and their powers
-      return functools.reduce(Quantity.__mul__,
+      return functools.reduce(
+        Quantity.__mul__,
         (self.constants[constant]['definition'] ** power
           for constant, power in arg.items()))
     else:
@@ -88,7 +89,8 @@ class UnitSystem:
       return self.constants[arg]['definition']
 
   def expand_quantity(self, quantity):
-    return (Quantity(quantity.value, quantity.error, {}, self) *
+    return (
+      Quantity(quantity.value, quantity.error, {}, self) *
       self.expand_units(quantity.units))
 
   def expand_units(self, units):
@@ -164,8 +166,8 @@ class UnitSystem:
       else:
         temp1 = value / 10**value_head
         temp2 = error / 10**value_head
-        return '({:.{dp}f} \xb1 {:.{dp}f})e{:+03}'.format(temp1, temp2,
-          value_head, dp=dp)
+        return '({:.{dp}f} \xb1 {:.{dp}f})e{:+03}'.format(
+          temp1, temp2, value_head, dp=dp)
     else:
       if value_head >= error_head:
         formatted_head = value_head
@@ -181,9 +183,10 @@ class UnitSystem:
         return '{:.{dp}f}({})e{}'.format(temp1, temp2, formatted_head, dp=dp)
 
   def format_units(self, units):
-    return ' '.join(self.format_unit(unit, power)
-      for unit, power in sorted(units.items(),
-      key=lambda arg: (math.copysign(1, -arg[1]), arg[0])))
+    return ' '.join(
+      self.format_unit(unit, power)
+      for unit, power in sorted(
+        units.items(), key=lambda arg: (math.copysign(1, -arg[1]), arg[0])))
 
   def format_unit(self, unit, power):
     symbol = self.units.get(unit, {'symbol': unit})['symbol']
@@ -272,7 +275,8 @@ class Quantity:
   def __truediv__(self, other):
     if isinstance(other, Quantity) and self.system is other.system:
       value = self.value / other.value
-      error = math.hypot(self.error / other.value,
+      error = math.hypot(
+        self.error / other.value,
         other.error * self.value / other.value**2)
       units = UnitArithmetic.divide(self.units, other.units)
       return Quantity(value, error, units, self.system)
@@ -339,7 +343,8 @@ class Quantity:
     return NotImplemented
 
   def __eq__(self, other):
-    return (isinstance(other, Quantity) and
+    return (
+      isinstance(other, Quantity) and
       self.value == other.value and self.error == other.error and
       self.units == other.units and self.system is other.system)
 
@@ -347,8 +352,8 @@ class Quantity:
     return not self == other
 
   def __hash__(self):
-    return hash((self.value, self.error,
-      tuple(sorted(self.units.items())), self.system))
+    return hash(
+      (self.value, self.error, tuple(sorted(self.units.items())), self.system))
 
   def almost_equals(self, other):
     if isinstance(other, Quantity) and self.system is other.system:
@@ -359,8 +364,8 @@ class Quantity:
       first = self.expand()
       if not first.units:
         return abs(first.value - other) < first.error
-    raise TypeError('quantities are incomparable: {} and {}'
-      .format(self, other))
+    raise TypeError(
+      'quantities are incomparable: {} and {}'.format(self, other))
 
   def __float__(self):
     first = self.expand()
@@ -379,7 +384,8 @@ class Quantity:
     return Quantity(self.value, self.error, self.units.copy(), self.system)
 
   def __repr__(self):
-    kwargs = ', '.join('{}={}'.format(key, repr(self.__dict__[key]))
+    kwargs = ', '.join(
+      '{}={}'.format(key, repr(self.__dict__[key]))
       for key in ['value', 'error', 'units', 'system'])
     return '{}({})'.format(self.__class__.__name__, kwargs)
 
@@ -398,5 +404,7 @@ class Quantity:
     systems = [arg.system for arg in args if isinstance(arg, Quantity)]
     if not all(system is systems[0] for system in systems):
       raise TypeError('arguments do not have the same system')
-    return [Quantity(arg, 0, {}, systems[0]) if isinstance(arg, numbers.Real)
-      else arg for arg in args]
+    return [
+      Quantity(arg, 0, {}, systems[0]) if isinstance(arg, numbers.Real)
+        else arg
+      for arg in args]

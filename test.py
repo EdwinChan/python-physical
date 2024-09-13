@@ -68,8 +68,7 @@ class PhysicalQuantitiesTest(unittest.TestCase):
   def test_divide(self):
     a = Quantity(2, 0.1, {'Kilogram': 1}, si)
     b = Quantity(4, 0.3, {'Meter': -2}, si)
-    c = Quantity(0.5, math.sqrt(13) / 80,
-      {'Kilogram': 1, 'Meter': 2}, si)
+    c = Quantity(0.5, math.sqrt(13)/80, {'Kilogram': 1, 'Meter': 2}, si)
     self.assert_quantity_equal(a / b, c)
     a = Quantity(1, 0.2, {'Kilogram': 1}, si) / 5
     b = Quantity(0.2, 0.04, {'Kilogram': 1}, si)
@@ -201,8 +200,8 @@ class PhysicalQuantitiesTest(unittest.TestCase):
       for string in strings.split(' '):
         unit, *power = string.split('^', 1)
         try:
-          unit = next(key for key, value in si.units.items()
-            if value['symbol'] == unit)
+          unit = next(
+            key for key, value in si.units.items() if value['symbol'] == unit)
         except StopIteration:
           return None
         power = int(*power) if power else 1
