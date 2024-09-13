@@ -190,22 +190,43 @@ class PhysicalQuantitiesTest(unittest.TestCase):
     while not next(data).startswith('--'):
       pass
     data = (re.split(' {2,}', x) for x in data)
-    def parse_value(x):
-      return float(x.replace(' ', '').replace('...', ''))
-    def parse_error(x):
-      return 0 if x == '(exact)' else float(x.replace(' ', ''))
-    data = {x: (parse_value(y), parse_error(z)) for x, y, z, *_ in data}
+    def parse_value(string):
+      return float(string.replace(' ', '').replace('...', ''))
+    def parse_error(string):
+      return 0 if string == '(exact)' else float(string.replace(' ', ''))
+    def parse_units(strings):
+      result = {}
+      if not strings:
+        return result
+      for string in strings.split(' '):
+        unit, *power = string.split('^', 1)
+        try:
+          unit = next(key for key, value in si.units.items()
+            if value['symbol'] == unit)
+        except StopIteration:
+          return None
+        power = int(*power) if power else 1
+        result[unit] = result.get(unit, 0) + power
+      return result
+    temp = {}
+    for codata_name, value, error, units in data:
+      units = parse_units(units)
+      if units is not None:
+        temp[codata_name] = parse_value(value), parse_error(error), units
+    data = temp
 
     for local_name, codata_name in units.items():
       quantity = Quantity(1, 0, {local_name: 1}, si).expand()
-      x, y = data[codata_name]
-      assert math.isclose(quantity.value, x)
-      assert math.isclose(quantity.error, y)
+      value, error, units = data[codata_name]
+      self.assertTrue(math.isclose(quantity.value, value))
+      self.assertTrue(math.isclose(quantity.error, error))
+      self.assertEqual(si.expand_units(quantity.units), si.expand_units(units))
     for local_name, codata_name in constants.items():
       quantity = si.get_constant(local_name).expand()
-      x, y = data[codata_name]
-      assert math.isclose(quantity.value, x)
-      assert math.isclose(quantity.error, y)
+      value, error, units = data[codata_name]
+      self.assertTrue(math.isclose(quantity.value, value))
+      self.assertTrue(math.isclose(quantity.error, error))
+      self.assertEqual(si.expand_units(quantity.units), si.expand_units(units))
 
 if __name__ == '__main__':
   unittest.main()
