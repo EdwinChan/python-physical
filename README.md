@@ -2,7 +2,7 @@
 
 This Python package allows the user to perform algebraic operations on physical quantities, each of which consists of three parts: a value, an error, and units. Errors are propagated automatically in quadrature. The package also comes with a vast set of pre-defined physical constants, which makes it extremely convenient for carrying out computations on physical problems.
 
-The package requires Python 3.3 or later.
+The package has been tested with Python 3.12.
 
 ### Getting started
 

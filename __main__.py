@@ -1,8 +1,8 @@
 import argparse
 import unittest
 
+from . import test
 from .define import defined_systems
-from .test import PhysicalQuantitiesTest
 
 def print_units(system):
   if system.units:
@@ -50,4 +50,6 @@ if __name__ == '__main__':
     print('Available constants:')
     print_constants(system)
   elif args.mode == 'test':
-    unittest.TextTestRunner().run(unittest.makeSuite(PhysicalQuantitiesTest))
+    loader = unittest.TestLoader()
+    runner = unittest.TextTestRunner()
+    runner.run(loader.loadTestsFromModule(test))

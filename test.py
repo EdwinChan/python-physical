@@ -207,12 +207,10 @@ class PhysicalQuantitiesTest(unittest.TestCase):
         power = int(*power) if power else 1
         result[unit] = result.get(unit, 0) + power
       return result
-    temp = {}
-    for codata_name, value, error, units in data:
-      units = parse_units(units)
-      if units is not None:
-        temp[codata_name] = parse_value(value), parse_error(error), units
-    data = temp
+    data = {
+      codata_name: (parse_value(value), parse_error(error), parsed_units)
+      for codata_name, value, error, units in data
+      if (parsed_units := parse_units(units)) is not None}
 
     for local_name, codata_name in units.items():
       quantity = Quantity(1, 0, {local_name: 1}, si).expand()
