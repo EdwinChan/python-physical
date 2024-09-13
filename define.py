@@ -1,5 +1,5 @@
 # sources:
-#   2018 CODATA recommended values
+#   2022 CODATA recommended values
 #   IUPAC, CIAAW, "Atomic weights of the elements 2013"
 #   IAU 2012 resolution B2
 #   IAU 2015 resolution B3
@@ -40,13 +40,13 @@ shared_system.add_unit('ArcSecond', '"',
 shared_system.add_constant('AvogadroConstant', 'NA',
   Quantity(6.02214076e23, 0, {'Mole': -1}, shared_system))
 shared_system.add_constant('ElectronGFactor', 'ge',
-  Quantity(-2.00231930436256, 3.5e-13, {}, shared_system))
+  Quantity(-2.00231930436092, 3.6e-13, {}, shared_system))
 shared_system.add_constant('ProtonGFactor', 'gp',
   Quantity(5.5856946893, 1.6e-9, {}, shared_system))
 shared_system.add_constant('NeutronGFactor', 'gn',
-  Quantity(-3.82608545, 9e-7, {}, shared_system))
+  Quantity(-3.82608552, 9e-7, {}, shared_system))
 shared_system.add_constant('MuonGFactor', 'g\u03bc',
-  Quantity(-2.0023318418, 1.3e-9, {}, shared_system))
+  Quantity(-2.00233184123, 8.2e-10, {}, shared_system))
 
 si_system = shared_system.copy()
 
@@ -94,13 +94,13 @@ si_system.add_constant('GravitationalConstant', 'G',
   Quantity(6.6743e-11, 1.5e-15, {
     'Newton': 1, 'Kilogram': -2, 'Meter': 2}, si_system))
 si_system.add_constant('VacuumPermeability', '\u03bc0',
-  Quantity(1.25663706212e-6, 1.9e-16, {'Newton': 1, 'Ampere': -2}, si_system))
+  Quantity(1.25663706127e-6, 2.0e-16, {'Newton': 1, 'Ampere': -2}, si_system))
 si_system.add_constant('ElectronMass', 'me',
-  Quantity(9.1093837015e-31, 2.8e-40, {'Kilogram': 1}, si_system))
+  Quantity(9.1093837139e-31, 2.8e-40, {'Kilogram': 1}, si_system))
 si_system.add_constant('ProtonMass', 'mp',
-  Quantity(1.67262192369e-27, 5.1e-37, {'Kilogram': 1}, si_system))
+  Quantity(1.67262192595e-27, 5.2e-37, {'Kilogram': 1}, si_system))
 si_system.add_constant('NeutronMass', 'mn',
-  Quantity(1.67492749804e-27, 9.5e-37, {'Kilogram': 1}, si_system))
+  Quantity(1.67492750056e-27, 8.5e-37, {'Kilogram': 1}, si_system))
 si_system.add_constant('MuonMass', 'm\u03bc',
   Quantity(1.883531627e-28, 4.2e-36, {'Kilogram': 1}, si_system))
 
@@ -142,7 +142,7 @@ si_system.add_constant('MolarGasConstant', 'R',
   si_system.get_constant({'AvogadroConstant': 1, 'BoltzmannConstant': 1}))
 
 si_system.add_unit('AtomicMassUnit', 'amu',
-  Quantity(1.6605390666e-27, 5e-37, {'Kilogram': 1}, si_system))
+  Quantity(1.66053906892e-27, 5.2e-37, {'Kilogram': 1}, si_system))
 si_system.add_constant('HydrogenMass', 'mH',
   Quantity(1.007975, 1.35e-4, {'AtomicMassUnit': 1}, si_system))
 si_system.add_constant('HeliumMass', 'mHe',
