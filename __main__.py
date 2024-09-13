@@ -29,7 +29,7 @@ if __name__ == '__main__':
     help='list units and constants',
     description='List all defined units and constants.')
   list_subparser.add_argument('system',
-    nargs='?', choices=defined_systems, default='si',
+    nargs='?', choices=defined_systems, default=next(iter(defined_systems)),
     help='unit system')
 
   test_subparser = subparsers.add_parser('test',
