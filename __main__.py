@@ -23,7 +23,7 @@ def print_constants(system):
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(
     description='Perform algebraic operations on physical quantities.')
-  subparsers = parser.add_subparsers(dest='mode')
+  subparsers = parser.add_subparsers(dest='mode', required=True)
 
   list_subparser = subparsers.add_parser('list',
     help='list units and constants',
