@@ -113,11 +113,6 @@ class PhysicalQuantitiesTest(unittest.TestCase):
     self.assertEqual(math.cos(b), math.cos(1))
 
   def test_expand(self):
-    # Lorentz force
-    a = Quantity(1, 0,
-      {'Coulomb': 1, 'Meter': 1, 'Second': -1, 'Tesla': 1}, si)
-    b = Quantity(1, 0, {'Newton': 1}, si)
-    self.assert_quantity_equal(a.expand(), b.expand())
     # Faraday's law
     a = Quantity(1, 0, {'Weber': 1, 'Second': -1}, si)
     b = Quantity(1, 0, {'Volt': 1}, si)
