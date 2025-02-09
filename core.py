@@ -219,76 +219,76 @@ class Quantity:
       self.system = weakref.ref(system)
 
   def __pos__(self):
-    return Quantity(self.value, self.error, self.units, self.system)
+    return __class__(self.value, self.error, self.units, self.system)
 
   def __neg__(self):
-    return Quantity(-self.value, self.error, self.units, self.system)
+    return __class__(-self.value, self.error, self.units, self.system)
 
   def __abs__(self):
-    return Quantity(abs(self.value), self.error, self.units, self.system)
+    return __class__(abs(self.value), self.error, self.units, self.system)
 
   def __add__(self, other):
-    if isinstance(other, Quantity) and self.system is other.system:
+    if isinstance(other, __class__) and self.system is other.system:
       first, second = self.expand(), other.expand()
       if first.units == second.units:
         value = first.value + second.value
         error = math.hypot(first.error, second.error)
-        return Quantity(value, error, first.units, first.system)
+        return __class__(value, error, first.units, first.system)
     elif isinstance(other, numbers.Real):
       if other == 0:
         return +self
       else:
         first = self.expand()
         if not first.units:
-          return Quantity(first.value + other, first.error, {}, first.system)
+          return __class__(first.value + other, first.error, {}, first.system)
     return NotImplemented
 
   def __sub__(self, other):
-    if isinstance(other, Quantity) and self.system is other.system:
+    if isinstance(other, __class__) and self.system is other.system:
       first, second = self.expand(), other.expand()
       if first.units == second.units:
         value = first.value - second.value
         error = math.hypot(first.error, second.error)
-        return Quantity(value, error, first.units, first.system)
+        return __class__(value, error, first.units, first.system)
     elif isinstance(other, numbers.Real):
       if other == 0:
         return +self
       else:
         first = self.expand()
         if not first.units:
-          return Quantity(first.value - other, first.error, {}, first.system)
+          return __class__(first.value - other, first.error, {}, first.system)
     return NotImplemented
 
   def __mul__(self, other):
-    if isinstance(other, Quantity) and self.system is other.system:
+    if isinstance(other, __class__) and self.system is other.system:
       value = self.value * other.value
       error = math.hypot(self.error * other.value, other.error * self.value)
       units = UnitArithmetic.multiply(self.units, other.units)
-      return Quantity(value, error, units, self.system)
+      return __class__(value, error, units, self.system)
     elif isinstance(other, numbers.Real):
       value = self.value * other
       error = abs(self.error * other)
-      return Quantity(value, error, self.units, self.system)
+      return __class__(value, error, self.units, self.system)
     else:
       return NotImplemented
 
   def __truediv__(self, other):
-    if isinstance(other, Quantity) and self.system is other.system:
+    if isinstance(other, __class__) and self.system is other.system:
       value = self.value / other.value
       error = math.hypot(
         self.error / other.value,
         other.error * self.value / other.value**2)
       units = UnitArithmetic.divide(self.units, other.units)
-      return Quantity(value, error, units, self.system)
+      return __class__(value, error, units, self.system)
     elif isinstance(other, numbers.Real):
       value = self.value / other
       error = abs(self.error / other)
-      return Quantity(value, error, self.units, self.system)
+      return __class__(value, error, self.units, self.system)
     else:
       return NotImplemented
 
   def __pow__(self, other):
-    if isinstance(other, Quantity) and self.system is other.system:
+    if isinstance(other, __class__) and self.system is other.system:
       first, second = self.expand(), other.expand()
       if not first.units and not second.units:
         value = first.value ** second.value
@@ -298,7 +298,7 @@ class Quantity:
             math.log(first.value) * second.error)
         else:
           error = first.error ** second.value
-        return Quantity(value, error, {}, first.system)
+        return __class__(value, error, {}, first.system)
       elif first.units and second.error == 0 and not second.units:
         return first ** second.value
     elif isinstance(other, numbers.Real):
@@ -308,7 +308,7 @@ class Quantity:
       else:
         error = self.error ** other
       units = UnitArithmetic.power(self.units, other)
-      return Quantity(value, error, units, self.system)
+      return __class__(value, error, units, self.system)
     return NotImplemented
 
   def __radd__(self, other):
@@ -339,12 +339,12 @@ class Quantity:
     if isinstance(other, numbers.Real):
       second = self.expand()
       if not second.units:
-        return Quantity(other, 0, {}, second.system) ** second
+        return __class__(other, 0, {}, second.system) ** second
     return NotImplemented
 
   def __eq__(self, other):
     return (
-      isinstance(other, Quantity) and
+      isinstance(other, __class__) and
       self.value == other.value and self.error == other.error and
       self.units == other.units and self.system is other.system)
 
@@ -381,13 +381,13 @@ class Quantity:
       return self
 
   def copy(self):
-    return Quantity(self.value, self.error, self.units.copy(), self.system)
+    return __class__(self.value, self.error, self.units.copy(), self.system)
 
   def __repr__(self):
     kwargs = ', '.join(
       '{}={!r}'.format(key, self.__dict__[key])
       for key in ['value', 'error', 'units', 'system'])
-    return '{}({})'.format(self.__class__.__name__, kwargs)
+    return '{}({})'.format(__class__.__name__, kwargs)
 
   def __str__(self):
     return format(self, '2s')
