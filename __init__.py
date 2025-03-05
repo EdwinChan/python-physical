@@ -1,10 +1,9 @@
 from .core import Quantity
 
-def setup():
-  import sys
+def setup(scope):
   from .util import Importer
   Importer.make_and_import_modules()
-  Importer.inject_extended_functions(sys.modules[__package__].__dict__)
+  Importer.inject_extended_functions(scope)
 
-setup()
+setup(globals())
 del setup

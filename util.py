@@ -11,13 +11,11 @@ from .func import extended_functions
 def expand(quantity=None):
   if quantity is not None:
     return quantity.expand()
-  else:
-    if '_' in builtins.__dict__:
-      quantity = builtins._
-      if isinstance(quantity, Quantity):
-        return quantity.expand()
-      elif isinstance(quantity, numbers.Real):
-        return quantity
+  quantity = getattr(builtins, '_', None)
+  if isinstance(quantity, Quantity):
+    return quantity.expand()
+  elif isinstance(quantity, numbers.Real):
+    return quantity
 
 class Importer:
   @classmethod
@@ -25,7 +23,7 @@ class Importer:
     for name, system in defined_systems.items():
       qualname = __package__ + '.' + name
       module = types.ModuleType(qualname)
-      cls.inject_variables(system, module.__dict__)
+      cls.inject_variables(system, vars(module))
       if not hasattr(__main__, '__file__') or sys.flags.interactive:
         cls.inject_interactive_features(module.__dict__)
       setattr(sys.modules[__package__], name, module)

@@ -385,7 +385,7 @@ class Quantity:
 
   def __repr__(self):
     kwargs = ', '.join(
-      '{}={!r}'.format(key, self.__dict__[key])
+      '{}={!r}'.format(key, getattr(self, key))
       for key in ['value', 'error', 'units', 'system'])
     return '{}({})'.format(__class__.__name__, kwargs)
 
