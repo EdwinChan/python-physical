@@ -3,7 +3,6 @@ import numbers
 import sys
 import types
 
-from . import __main__
 from .core import Quantity
 from .define import defined_systems
 from .func import extended_functions
@@ -22,8 +21,6 @@ def make_and_import_modules():
     qualname = __package__ + '.' + name
     module = types.ModuleType(qualname)
     inject_variables(system, vars(module))
-    if not hasattr(__main__, '__file__') or sys.flags.interactive:
-      inject_interactive_features(module.__dict__)
     setattr(sys.modules[__package__], name, module)
     sys.modules[qualname] = module
 
@@ -55,8 +52,10 @@ def inject_extended_functions(locals):
   for function in extended_functions:
     locals[function.__name__] = function
 
-def inject_interactive_features(locals):
+def enable_interactive_features(locals=None):
+  import __main__
+  locals = vars(__main__) if locals is None else locals
+  Quantity.__repr__ = Quantity.__str__
   locals['Quantity'] = Quantity
-  locals['Quantity'].__repr__ = locals['Quantity'].__str__
   locals['expand'] = expand
   inject_extended_functions(locals)

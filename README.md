@@ -6,11 +6,18 @@ The package has been tested with Python 3.12.
 
 ### Getting started
 
-For typical use, simply import `physical.<system>` in an interactive session or in a script, where `<system>` is one of `si`, `cgs`, `esu`, `emu`, and `gauss`:
+For typical use, simply import `physical.<system>` in an interactive session or a script, where `<system>` is one of `si`, `cgs`, `esu`, `emu`, and `gauss`:
 
 ```python
 >>> from math import pi
 >>> from physical.si import *
+```
+
+In case of an interactive session, run `physical.enable_interactive_features()` as well:
+
+```python
+>>> import physical
+>>> physical.enable_interactive_features()
 ```
 
 The quantity (9.81 ± 0.01) m s⁻² can be declared explicitly as
