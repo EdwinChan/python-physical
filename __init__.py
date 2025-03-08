@@ -1,9 +1,9 @@
 from .core import Quantity
 
-def setup(scope):
+def setup(locals):
   from .util import make_and_import_modules, inject_extended_functions
   make_and_import_modules()
-  inject_extended_functions(scope)
+  inject_extended_functions(locals)
 
 setup(globals())
 del setup

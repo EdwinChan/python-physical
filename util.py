@@ -27,8 +27,8 @@ def make_and_import_modules():
     setattr(sys.modules[__package__], name, module)
     sys.modules[qualname] = module
 
-def inject_variables(system, scope):
-  scope['system'] = system
+def inject_variables(system, locals):
+  locals['system'] = system
   symbol_to_english = {
     '\u03b1': 'alpha',    '\u03b2': 'beta',     '\u03b3': 'gamma',
     '\u03b4': 'delta',    '\u03b5': 'epsilon',  '\u03b6': 'zeta',
@@ -44,19 +44,19 @@ def inject_variables(system, scope):
     name = data['symbol']
     for symbol, english in symbol_to_english.items():
       name = name.replace(symbol, english)
-    scope[name] = Quantity(1, 0, {unit: 1}, system)
+    locals[name] = Quantity(1, 0, {unit: 1}, system)
   for data in system.constants.values():
     name = data['symbol']
     for symbol, english in symbol_to_english.items():
       name = name.replace(symbol, english)
-    scope[name] = data['definition']
+    locals[name] = data['definition']
 
-def inject_extended_functions(scope):
+def inject_extended_functions(locals):
   for function in extended_functions:
-    scope[function.__name__] = function
+    locals[function.__name__] = function
 
-def inject_interactive_features(scope):
-  scope['Quantity'] = Quantity
-  scope['Quantity'].__repr__ = scope['Quantity'].__str__
-  scope['expand'] = expand
-  inject_extended_functions(scope)
+def inject_interactive_features(locals):
+  locals['Quantity'] = Quantity
+  locals['Quantity'].__repr__ = locals['Quantity'].__str__
+  locals['expand'] = expand
+  inject_extended_functions(locals)
