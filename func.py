@@ -22,7 +22,7 @@ def wrap_unitless_function(func, *derivs):
           value = func(*arg_values)
           error = math.sqrt(sum(
             (deriv(*arg_values) * arg.error)**2
-            for arg, deriv in zip(args, derivs)))
+            for arg, deriv in zip(args, derivs, strict=True)))
           return Quantity(value, error, {}, args[0].system)
     return func(*args)
   return wrapper
