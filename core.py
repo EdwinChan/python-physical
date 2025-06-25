@@ -1,6 +1,7 @@
 import copy
 import fractions
 import functools
+import itertools
 import math
 import numbers
 import re
@@ -129,16 +130,15 @@ class UnitSystem:
   def format_value_error(value, error, format_spec, parens=False):
     # options: number of significant digits displayed for error
     #          separate value and error ('s') or parenthesize error ('p')
-    match = re.fullmatch(r'(\d+)?([sp])?', format_spec)
-    if not match:
+    if not (result := re.fullmatch(r'(\d+)?([sp])?', format_spec)):
       raise ValueError('invalid format specifier')
     error_sigfig, mode = 2, 's'
-    temp = match.group(1)
+    temp = result.group(1)
     if temp is not None:
       temp = int(temp)
       if temp > 0:
         error_sigfig = temp
-    temp = match.group(2)
+    temp = result.group(2)
     if temp is not None:
       mode = temp
     if not math.isfinite(value) or not math.isfinite(error):
@@ -183,10 +183,9 @@ class UnitSystem:
         return '{:.{dp}f}({})e{}'.format(temp1, temp2, formatted_head, dp=dp)
 
   def format_units(self, units):
-    return ' '.join(
-      self.format_unit(unit, power)
-      for unit, power in sorted(
-        units.items(), key=lambda arg: (math.copysign(1, -arg[1]), arg[0])))
+    units = sorted(
+      units.items(), key=lambda arg: (math.copysign(1, -arg[1]), arg[0]))
+    return ' '.join(itertools.starmap(self.format_unit, units))
 
   def format_unit(self, unit, power):
     symbol = self.units.get(unit, {'symbol': unit})['symbol']
