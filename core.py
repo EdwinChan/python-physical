@@ -234,6 +234,8 @@ class Quantity:
         value = first.value + second.value
         error = math.hypot(first.error, second.error)
         return __class__(value, error, first.units, first.system)
+      else:
+        return NotImplemented
     elif isinstance(other, numbers.Real):
       if other == 0:
         return +self
@@ -241,7 +243,10 @@ class Quantity:
         first = self.expand()
         if not first.units:
           return __class__(first.value + other, first.error, {}, first.system)
-    return NotImplemented
+        else:
+          return NotImplemented
+    else:
+      return NotImplemented
 
   def __sub__(self, other):
     if isinstance(other, __class__) and self.system is other.system:
@@ -250,6 +255,8 @@ class Quantity:
         value = first.value - second.value
         error = math.hypot(first.error, second.error)
         return __class__(value, error, first.units, first.system)
+      else:
+        return NotImplemented
     elif isinstance(other, numbers.Real):
       if other == 0:
         return +self
@@ -257,7 +264,10 @@ class Quantity:
         first = self.expand()
         if not first.units:
           return __class__(first.value - other, first.error, {}, first.system)
-    return NotImplemented
+        else:
+          return NotImplemented
+    else:
+      return NotImplemented
 
   def __mul__(self, other):
     if isinstance(other, __class__) and self.system is other.system:
@@ -301,6 +311,8 @@ class Quantity:
         return __class__(value, error, {}, first.system)
       elif first.units and second.error == 0 and not second.units:
         return first ** second.value
+      else:
+        return NotImplemented
     elif isinstance(other, numbers.Real):
       value = self.value ** other
       if self.value != 0:
@@ -309,38 +321,30 @@ class Quantity:
         error = self.error ** other
       units = UnitArithmetic.power(self.units, other)
       return __class__(value, error, units, self.system)
-    return NotImplemented
+    else:
+      return NotImplemented
 
   def __radd__(self, other):
-    if isinstance(other, numbers.Real):
-      return self + other
-    else:
-      return NotImplemented
+    return self + other
 
   def __rsub__(self, other):
-    if isinstance(other, numbers.Real):
-      return -self + other
-    else:
-      return NotImplemented
+    return -self + other
 
   def __rmul__(self, other):
-    if isinstance(other, numbers.Real):
-      return self * other
-    else:
-      return NotImplemented
+    return self * other
 
   def __rtruediv__(self, other):
-    if isinstance(other, numbers.Real):
-      return self**-1 * other
-    else:
-      return NotImplemented
+    return self**-1 * other
 
   def __rpow__(self, other):
     if isinstance(other, numbers.Real):
       second = self.expand()
       if not second.units:
         return __class__(other, 0, {}, second.system) ** second
-    return NotImplemented
+      else:
+        return NotImplemented
+    else:
+      return NotImplemented
 
   def __eq__(self, other):
     return (
