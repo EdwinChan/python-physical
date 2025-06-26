@@ -18,11 +18,13 @@ def expand(quantity=None):
 
 def make_and_import_modules():
   for name, system in defined_systems.items():
-    qualname = __package__ + '.' + name
-    module = types.ModuleType(qualname)
+    full_name = __package__ + '.' + name
+    module = types.ModuleType(full_name)
+    setattr(module, '__file__', '<generated>')
+    setattr(module, '__package__', __package__)
     inject_variables(system, vars(module))
     setattr(sys.modules[__package__], name, module)
-    sys.modules[qualname] = module
+    sys.modules[full_name] = module
 
 def inject_variables(system, locals):
   locals['system'] = system
