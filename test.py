@@ -4,6 +4,8 @@ import unittest
 import urllib.error
 import urllib.request
 
+from pathlib import Path
+
 from .core import Quantity
 from .define import defined_systems
 
@@ -155,6 +157,7 @@ class PhysicalQuantitiesTest(unittest.TestCase):
 
   def test_codata(self):
     url = 'http://physics.nist.gov/cuu/Constants/Table/allascii.txt'
+    use_local_copy = True
 
     units = {
       'AtomicMassUnit':        'unified atomic mass unit'}
@@ -175,12 +178,19 @@ class PhysicalQuantitiesTest(unittest.TestCase):
       'NeutronMass':           'neutron mass',
       'MuonMass':              'muon mass'}
 
-    try:
-      response = urllib.request.urlopen(url)
-    except urllib.error.URLError:
-      raise ValueError('Cannot download data.')
+    if not use_local_copy:
+      try:
+        response = urllib.request.urlopen(url)
+      except urllib.error.URLError:
+        use_local_copy = True
+      else:
+        data = response.read().decode('ascii')
 
-    data = iter(response.read().decode('ascii').rstrip('\n').split('\n'))
+    if use_local_copy:
+      with open(Path(__file__).with_name('codata.txt'), 'rt') as file:
+        data = file.read()
+
+    data = iter(data.rstrip('\n').split('\n'))
     while not next(data).startswith('--'):
       pass
     data = (re.split(' {2,}', x) for x in data)
